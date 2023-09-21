@@ -7,14 +7,15 @@ const Header = () => {
 
   useEffect(() => {
     async function fetchData() {
-      // try {
+      try {
         const response = await axios.get('http://localhost:4001/profile', {
           withCredentials: true
         });
+        
         console.log(response.data);
-      // } catch (error) {
-      //   console.error(error);
-      // }
+      } catch (error) {
+        console.error(error);
+      }
     }
     fetchData();
   }, []);
@@ -25,6 +26,7 @@ const Header = () => {
     <nav>
       <Link to="/login">login</Link>
       <Link to="/register">register</Link>
+      <Link to='/create'>Create Post</Link>
     </nav>
   </header>
   )
