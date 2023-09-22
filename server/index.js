@@ -69,7 +69,7 @@ app.use('/uploads', express.static(__dirname + '/uploads'));
 
 
   //Login User
-  app.post("/login", async function (req, res){
+  app.post("/login", async function (req, res) {
     const { Username, password } = req.body;
     const userDoc = await User.findOne({ Username });
   
@@ -79,28 +79,38 @@ app.use('/uploads', express.static(__dirname + '/uploads'));
   
     const passwordCorrect = await bcrypt.compare(password, userDoc.password);
   
-    if (passwordCorrect) { 
-      const token = jwt.sign({
+    if (passwordCorrect) {
+      const token = await jwt.sign({
         Username: Username,
         id: userDoc._id
       }, secret);
-  
+    
       // Set the JWT token as a cookie
-      res.cookie('token', token, {
+      const cookie=await res.cookie('token', token, {
         httpOnly: true,
         expires: new Date(Date.now() + 86400 * 1000),
         path: '/',
-      }).send(); // Sending the cookie response here
-  
+      }).send();
+      console.log(cookie);
+    
+      // Send the token value as a JSON response
+      // res.json({ token });
+    
+      // Send a JSON response indicating success
+      // return res.json({ message: "Login successful" });
+      // Send a JSON response indicating success
+      // return res.json({ message: "Login successful" });
     } else {
       res.status(401).json({ message: "Login failed. Please check your credentials." });
     }
   });
   
+  
+  
 
 
   app.get('/profile',(req,res)=>{
-    res.json(req.cookies);
+    res.json(req.token);
     // const {token}=req.cookies
     // jwt.verify(token,secret,{},(err,info)=>{
     //   if(err){

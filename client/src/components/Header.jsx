@@ -9,7 +9,8 @@ const Header = () => {
     async function fetchData() {
       try {
         const response = await axios.get('http://localhost:4001/profile', {
-          withCredentials: true
+          // withCredentials: true
+          credentials: "same-origin"
         });
         
         console.log(response.data);
